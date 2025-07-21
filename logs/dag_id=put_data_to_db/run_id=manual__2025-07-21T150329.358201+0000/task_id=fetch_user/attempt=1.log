@@ -1,0 +1,24 @@
+[2025-07-21T15:03:30.685+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: put_data_to_db.fetch_user manual__2025-07-21T15:03:29.358201+00:00 [queued]>
+[2025-07-21T15:03:30.694+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: put_data_to_db.fetch_user manual__2025-07-21T15:03:29.358201+00:00 [queued]>
+[2025-07-21T15:03:30.695+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2025-07-21T15:03:30.712+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): fetch_user> on 2025-07-21 15:03:29.358201+00:00
+[2025-07-21T15:03:30.716+0000] {standard_task_runner.py:60} INFO - Started process 419 to run task
+[2025-07-21T15:03:30.719+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'put_data_to_db', 'fetch_user', 'manual__2025-07-21T15:03:29.358201+00:00', '--job-id', '10', '--raw', '--subdir', 'DAGS_FOLDER/__pycache__/get_data_to_db.py', '--cfg-path', '/tmp/tmpakqevhvu']
+[2025-07-21T15:03:30.721+0000] {standard_task_runner.py:88} INFO - Job 10: Subtask fetch_user
+[2025-07-21T15:03:30.767+0000] {task_command.py:423} INFO - Running <TaskInstance: put_data_to_db.fetch_user manual__2025-07-21T15:03:29.358201+00:00 [running]> on host 01a72dbe7648
+[2025-07-21T15:03:30.842+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='put_data_to_db' AIRFLOW_CTX_TASK_ID='fetch_user' AIRFLOW_CTX_EXECUTION_DATE='2025-07-21T15:03:29.358201+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-07-21T15:03:29.358201+00:00'
+[2025-07-21T15:03:31.418+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/__pycache__/get_data_to_db.py", line 46, in fetch_user_data
+    data[i] = user
+IndexError: list assignment index out of range
+[2025-07-21T15:03:31.435+0000] {taskinstance.py:1138} INFO - Marking task as FAILED. dag_id=put_data_to_db, task_id=fetch_user, execution_date=20250721T150329, start_date=20250721T150330, end_date=20250721T150331
+[2025-07-21T15:03:31.451+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 10 for task fetch_user (list assignment index out of range; 419)
+[2025-07-21T15:03:31.495+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2025-07-21T15:03:31.525+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

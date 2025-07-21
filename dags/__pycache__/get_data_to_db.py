@@ -10,40 +10,45 @@ default_args = {
 def fetch_user_data(**context):
     import requests
 
-    url = 'https://randomuser.me/api/'
-    response = requests.get(url)
+    data = []
+    for _ in range(30):
+        url = 'https://randomuser.me/api/'
+        response = requests.get(url)
 
-    if response.status_code == 200:
-        res = response.json()
-        
-        res = res['results'][0]
+        if response.status_code == 200:
+            res = response.json()
+            res = res['results'][0]
 
-        # lấy các trường dữ liệu
-        fist_name = res['name']['first']
-        last_name = res['name']['last']
-        name = fist_name + " " + last_name
-        location = str(res['location']['street']['number']) + " " + res['location']['street']['name']
-        city = res['location']['city']
-        country = res['location']['country']
-        email = res['email']
-        phone = res['phone']
-        picture = res['picture']['large']
+            # Lấy các trường dữ liệu
+            first_name = res['name']['first']
+            last_name = res['name']['last']
+            name = f"{first_name} {last_name}"
+            location = f"{res['location']['street']['number']} {res['location']['street']['name']}"
+            city = res['location']['city']
+            country = res['location']['country']
+            email = res['email']
+            phone = res['phone']
+            picture = res['picture']['large']
 
-        data = {
-            'first_name': fist_name,
-            'last_name': last_name,
-            'name': name,
-            'location': location,
-            'city': city,
-            'country': country,
-            'email': email,
-            'phone': phone,
-            'picture': picture
-        }
+            user_data = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'name': name,
+                'location': location,
+                'city': city,
+                'country': country,
+                'email': email,
+                'phone': phone,
+                'picture': picture
+            }
 
-        context['ti'].xcom_push(key='user_data', value=data)
-    else:
-        raise Exception(f"API request failed: {response.status_code}")
+            data.append(user_data)
+        else:
+            raise Exception(f"API request failed: {response.status_code}")
+
+    # Push danh sách 10 người dùng lên XCom
+    context['ti'].xcom_push(key='user_data', value=data)
+
 
 def insert_to_db(**context):
     import psycopg2
@@ -58,11 +63,14 @@ def insert_to_db(**context):
         user= 'postgres',
         password= '123456'
     )
-
     cur = conn.cursor()
-    cur.execute("INSERT INTO users (first_name, last_name, name, location, city, country, email, phone, picture) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                (data['first_name'], data['last_name'], data['name'], data['location'], data['city'], data['country'], data['email'], data['phone'], data['picture']))
-    conn.commit()
+
+    for i in range(30):
+        user = data[i]
+        
+        cur.execute("INSERT INTO users (first_name, last_name, name, location, city, country, email, phone, picture) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                    (user['first_name'], user['last_name'], user['name'], user['location'], user['city'], user['country'], user['email'], user['phone'], user['picture']))
+        conn.commit()
 
     cur.close()
     conn.close()
