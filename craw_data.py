@@ -10,6 +10,7 @@ if response.status_code == 200:
     
     res = res['results'][0]
 
+    # lấy các trường dữ liệu
     fist_name = res['name']['first']
     last_name = res['name']['last']
     name = fist_name + " " + last_name
@@ -32,6 +33,7 @@ if response.status_code == 200:
         'picture': picture
     }
 
+    # cấu hình kết nối db
     conn = psycopg2.connect(
         host= 'localhost',
         port= 5432,
@@ -40,6 +42,7 @@ if response.status_code == 200:
         password= '123456'
     )
 
+    # insert dữ liệu vào db
     cur = conn.cursor()
     cur.execute("INSERT INTO users_tb (first_name, last_name, name, location, city, country, email, phone, picture) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
                 (data['first_name'], data['last_name'], data['name'], data['location'], data['city'], data['country'], data['email'], data['phone'], data['picture']))
@@ -47,7 +50,3 @@ if response.status_code == 200:
 
     cur.close()
     conn.close()
-
-
-else:
-    print("Failed to retrieve data:", response.status_code)
