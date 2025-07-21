@@ -1,0 +1,28 @@
+[2025-07-21T14:41:41.138+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: put_data_to_db.insert_to_db manual__2025-07-21T14:41:39.319461+00:00 [queued]>
+[2025-07-21T14:41:41.146+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: put_data_to_db.insert_to_db manual__2025-07-21T14:41:39.319461+00:00 [queued]>
+[2025-07-21T14:41:41.147+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2025-07-21T14:41:41.160+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): insert_to_db> on 2025-07-21 14:41:39.319461+00:00
+[2025-07-21T14:41:41.164+0000] {standard_task_runner.py:60} INFO - Started process 494 to run task
+[2025-07-21T14:41:41.167+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'put_data_to_db', 'insert_to_db', 'manual__2025-07-21T14:41:39.319461+00:00', '--job-id', '15', '--raw', '--subdir', 'DAGS_FOLDER/__pycache__/get_data_to_db.py', '--cfg-path', '/tmp/tmp97nqp5ll']
+[2025-07-21T14:41:41.168+0000] {standard_task_runner.py:88} INFO - Job 15: Subtask insert_to_db
+[2025-07-21T14:41:41.208+0000] {task_command.py:423} INFO - Running <TaskInstance: put_data_to_db.insert_to_db manual__2025-07-21T14:41:39.319461+00:00 [running]> on host d7e7273683d1
+[2025-07-21T14:41:41.278+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='put_data_to_db' AIRFLOW_CTX_TASK_ID='insert_to_db' AIRFLOW_CTX_EXECUTION_DATE='2025-07-21T14:41:39.319461+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-07-21T14:41:39.319461+00:00'
+[2025-07-21T14:41:41.291+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/__pycache__/get_data_to_db.py", line 54, in insert_to_db
+    conn = psycopg2.connect(
+  File "/home/airflow/.local/lib/python3.8/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "postgres" (192.168.48.2), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+[2025-07-21T14:41:41.302+0000] {taskinstance.py:1138} INFO - Marking task as FAILED. dag_id=put_data_to_db, task_id=insert_to_db, execution_date=20250721T144139, start_date=20250721T144141, end_date=20250721T144141
+[2025-07-21T14:41:41.315+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 15 for task insert_to_db (connection to server at "postgres" (192.168.48.2), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+; 494)
+[2025-07-21T14:41:41.340+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2025-07-21T14:41:41.356+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

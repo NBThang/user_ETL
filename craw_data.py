@@ -44,7 +44,7 @@ if response.status_code == 200:
 
     # insert dữ liệu vào db
     cur = conn.cursor()
-    cur.execute("INSERT INTO users_tb (first_name, last_name, name, location, city, country, email, phone, picture) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+    cur.execute("INSERT INTO users (first_name, last_name, name, location, city, country, email, phone, picture) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
                 (data['first_name'], data['last_name'], data['name'], data['location'], data['city'], data['country'], data['email'], data['phone'], data['picture']))
     conn.commit()
 
