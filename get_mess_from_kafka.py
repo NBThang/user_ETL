@@ -1,26 +1,14 @@
-from confluent_kafka import Consumer
+from kafka import KafkaConsumer
 
-conf = {
-    'bootstrap.servers': '192.168.33.109:9092',  # phải đúng với advertised.listeners
-    'group.id': 'my-consumer-group',
-    'auto.offset.reset': 'earliest'
-}
+consumer = KafkaConsumer(
+    'pg1.public.users',  # thay bằng tên topic thực tế
+    bootstrap_servers='192.168.33.109:9092',  # vì bạn dùng host.docker.internal:9092
+    auto_offset_reset='earliest',  # đọc từ đầu
+    enable_auto_commit=True,
+    group_id='my-group',
+    value_deserializer=lambda x: x.decode('utf-8')
+)
 
-consumer = Consumer(conf)
-consumer.subscribe(['pg1.public.users'])
-
-print("Đang chờ message từ Kafka...")
-
-try:
-    while True:
-        msg = consumer.poll(timeout=1.0)
-        if msg is None:
-            continue
-        if msg.error():
-            print("Lỗi:", msg.error())
-        else:
-            print(f"Message: {msg.value().decode('utf-8')}")
-except KeyboardInterrupt:
-    print("Dừng.")
-finally:
-    consumer.close()
+print("Đang đợi message...")
+for message in consumer:
+    print(f"Message nhận được: {message.value}")
